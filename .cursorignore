@@ -1,0 +1,38 @@
+# Cursor plugin - exclude unnecessary files
+
+# VSCode plugin
+.vscode/**
+vscode/**
+
+# VS Code specific
+.vscodeignore
+
+# Test files
+test/**
+
+# Source files
+src/**
+
+# TypeScript files
+*.ts
+*.map
+
+# Old test files
+test-full-coverage.js
+test-full-coverage.js.map
+
+# Build output
+out/**
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!README.md

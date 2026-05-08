@@ -1,0 +1,25 @@
+# VS Code
+.vscode/**
+.vscode-test/**
+
+# Source files
+src/**
+
+# Test files
+test/**
+
+# TypeScript files
+*.ts
+*.map
+
+# IDE
+.gitignore
+*.md
+
+# Old compiled files (before moving to test/)
+test-full-coverage.js
+test-full-coverage.js.map
+
+# OS
+.DS_Store
+Thumbs.db

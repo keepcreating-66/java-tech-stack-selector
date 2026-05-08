@@ -3,7 +3,7 @@ name: tech-stack-selector
 description: Java后端项目技术选型助手。帮助开发者完成项目技术栈选择，生成技术栈配置、Maven依赖、项目提示词，并支持在Cursor中直接生成项目框架。当用户提到"Java项目"、"技术选型"、"创建Spring Boot项目"、"初始化后端项目"时使用此技能。
 license: MIT
 metadata:
-  author: 你的名字
+  author: Developer
   version: "1.0.0"
   category: development
   language: java

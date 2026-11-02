@@ -7,10 +7,10 @@ exports.getAIProvider = getAIProvider;
  * 空实现，后续扩展
  */
 class PlaceholderAIProvider {
-    async chat(message) {
+    async chat(_message) {
         throw new Error('AI功能尚未实现');
     }
-    async generateConfig(description) {
+    async generateConfig(_description) {
         throw new Error('AI功能尚未实现');
     }
 }

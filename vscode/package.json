@@ -1,10 +1,11 @@
 {
   "name": "java-tech-stack-selector",
   "displayName": "Java Tech Stack Selector",
-  "description": "帮助Java开发者快速完成后端项目技术选型，支持表单式配置生成",
-  "version": "1.0.0",
-  "icon": "icon.svg",
+  "description": "按系统架构选型并生成可验证的 Java 后端工程",
+  "version": "1.1.0",
   "publisher": "java-tech-stack-developer",
+  "license": "MIT",
+  "repository": {"type": "git", "url": "https://github.com/keepcreating-66/java-tech-stack-selector.git"},
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -41,6 +42,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "test": "npm run compile && node --test test/*.test.cjs",
+    "test:projects": "npm run compile && node test/verify-projects.cjs",
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {

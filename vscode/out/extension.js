@@ -36,56 +36,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
-const quickPick_1 = require("./ui/quickPick");
+const wizard_1 = require("./flow/wizard");
 const generator_1 = require("./core/generator");
-const ai_1 = require("./core/ai");
+/** Both commands enter the same architecture-first, reviewable flow. */
 function activate(context) {
-    // 注册AI Provider（预留）
-    (0, ai_1.registerAIProvider)(new ai_1.PlaceholderAIProvider());
-    // 注册开始选型命令
-    let startCmd = vscode.commands.registerCommand('javaTechStack.start', async () => {
+    async function execute() {
         try {
-            // 显示进度
-            await vscode.window.withProgress({
-                location: vscode.ProgressLocation.Notification,
-                title: 'Java Tech Stack Selector',
-                cancellable: false
-            }, async (progress) => {
-                progress.report({ message: '正在收集配置...' });
-                const config = await (0, quickPick_1.startTechStackSelection)();
-                if (config) {
-                    progress.report({ message: '正在生成项目...' });
-                    await (0, generator_1.generateProject)(config);
-                }
-            });
+            const config = await (0, wizard_1.runWizard)();
+            if (!config) {
+                return;
+            }
+            await (0, generator_1.generateProject)(config);
         }
         catch (error) {
-            vscode.window.showErrorMessage(`技术选型失败: ${error.message || error}`);
+            void vscode.window.showErrorMessage(`项目生成失败：${error instanceof Error ? error.message : String(error)}`);
         }
-    });
-    // 注册预设方案命令
-    let presetCmd = vscode.commands.registerCommand('javaTechStack.preset', async () => {
-        // 快速使用预设方案
-        const { PRESETS } = await Promise.resolve().then(() => __importStar(require('./core/data')));
-        const items = PRESETS.map(p => ({
-            label: `${p.icon} ${p.name}`,
-            description: p.description,
-            preset: p
-        }));
-        const selected = await vscode.window.showQuickPick(items, {
-            placeHolder: '选择预设方案',
-            ignoreFocusOut: true
-        });
-        if (selected) {
-            try {
-                await (0, generator_1.generateProject)(selected.preset.config);
-            }
-            catch (error) {
-                vscode.window.showErrorMessage(`生成失败: ${error.message || error}`);
-            }
-        }
-    });
-    context.subscriptions.push(startCmd, presetCmd);
+    }
+    context.subscriptions.push(vscode.commands.registerCommand('javaTechStack.start', execute), vscode.commands.registerCommand('javaTechStack.preset', execute));
 }
 function deactivate() { }
 //# sourceMappingURL=extension.js.map

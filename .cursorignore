@@ -33,6 +33,4 @@ out/**
 .DS_Store
 Thumbs.db
 
-# Documentation
-*.md
-!README.md
+# Keep README, commands, skill instructions and references available to Cursor.

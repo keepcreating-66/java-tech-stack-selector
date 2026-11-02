@@ -1,85 +1,20 @@
 {
+  "schemaVersion": 1,
+  "presetId": "custom",
+  "outputMode": "project",
   "project": {
-    "name": "${PROJECT_NAME}",
-    "type": "${PROJECT_TYPE}",
-    "javaVersion": "${JAVA_VERSION}",
-    "buildTool": "${BUILD_TOOL}"
+    "name": "my-project",
+    "type": "monolith",
+    "javaVersion": "17",
+    "buildTool": "maven",
+    "modules": ["user", "order"]
   },
-  "core": {
-    "framework": "${FRAMEWORK}",
-    "frameworkVersion": "${FRAMEWORK_VERSION}",
-    "web": "${WEB_FRAMEWORK}",
-    "microservice": ${MICROSERVICE_COMPONENT}
-  },
-  "database": {
-    "rdbms": "${RDBMS}",
-    "version": "${RDBMS_VERSION}",
-    "orm": "${ORM}",
-    "ormVersion": "${ORM_VERSION}",
-    "pool": "${POOL}",
-    "poolVersion": "${POOL_VERSION}",
-    "nosql": ${NOSQL_LIST}
-  },
-  "cache": {
-    "enabled": ${CACHE_ENABLED},
-    "framework": "${CACHE_FRAMEWORK}",
-    "redisClient": "${REDIS_CLIENT}",
-    "redisVersion": "${REDIS_VERSION}",
-    "strategy": "${CACHE_STRATEGY}"
-  },
-  "messaging": {
-    "enabled": ${MESSAGING_ENABLED},
-    "middleware": "${MESSAGING}",
-    "version": "${MESSAGING_VERSION}"
-  },
-  "search": {
-    "enabled": ${SEARCH_ENABLED},
-    "engine": "${SEARCH_ENGINE}",
-    "version": "${SEARCH_VERSION}"
-  },
-  "security": {
-    "framework": "${SECURITY_FRAMEWORK}",
-    "version": "${SECURITY_VERSION}",
-    "tokenType": "${TOKEN_TYPE}",
-    "permissionModel": "${PERMISSION_MODEL}"
-  },
-  "workflow": {
-    "enabled": ${WORKFLOW_ENABLED},
-    "engine": "${WORKFLOW_ENGINE}",
-    "version": "${WORKFLOW_VERSION}"
-  },
-  "scheduler": {
-    "enabled": ${SCHEDULER_ENABLED},
-    "framework": "${SCHEDULER}",
-    "version": "${SCHEDULER_VERSION}"
-  },
-  "api": {
-    "style": "restful",
-    "documentation": "${API_DOC}",
-    "version": "${API_DOC_VERSION}",
-    "httpClient": "${HTTP_CLIENT}"
-  },
-  "tools": {
-    "utility": ${UTILITY_LIST},
-    "json": "${JSON_LIB}",
-    "objectMapping": "${OBJECT_MAPPING}",
-    "excel": "${EXCEL_LIB}",
-    "lombok": ${LOMBOK_ENABLED}
-  },
-  "monitoring": {
-    "tracing": ${TRACING},
-    "logging": ${LOGGING},
-    "metrics": ${METRICS}
-  },
-  "microservice": {
-    "registry": ${REGISTRY},
-    "gateway": ${GATEWAY},
-    "rpc": ${RPC},
-    "circuitBreaker": ${CIRCUIT_BREAKER},
-    "distributedTransaction": ${DISTRIBUTED_TX}
-  },
-  "deployment": {
-    "containerization": "${CONTAINER}",
-    "orchestration": "${ORCHESTRATION}"
-  }
+  "core": {"framework": "spring-boot-3", "web": "webmvc"},
+  "database": {"rdbms": "mysql-8", "orm": "jpa", "pool": "hikari", "nosql": []},
+  "cache": {"type": "none"},
+  "security": {"framework": "spring-security"},
+  "api": {"documentation": "none"},
+  "messaging": "none",
+  "workflow": "none",
+  "scheduler": "none"
 }

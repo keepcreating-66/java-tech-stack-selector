@@ -11,10 +11,12 @@ test/**
 # TypeScript files
 *.ts
 *.map
+**/*.map
+tsconfig.json
 
 # IDE
 .gitignore
-*.md
+.eslintrc*
 
 # Old compiled files (before moving to test/)
 test-full-coverage.js

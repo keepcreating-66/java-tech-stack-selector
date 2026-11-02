@@ -1,205 +1,85 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VERSION_MAP = exports.OPTIONS = exports.PRESETS = void 0;
-// 预设方案
+exports.VERSION_MAP = exports.OPTIONS = exports.PRESETS = exports.DEFAULT_CONFIG = void 0;
+/** A business preset supplies defaults. The wizard always asks for architecture. */
+exports.DEFAULT_CONFIG = {
+    schemaVersion: 1,
+    outputMode: 'project',
+    project: { name: 'my-project', type: 'monolith', javaVersion: '17', buildTool: 'maven', modules: ['user', 'order'] },
+    core: { framework: 'spring-boot-3', web: 'webmvc' },
+    database: { rdbms: 'mysql-8', orm: 'jpa', pool: 'hikari', nosql: [] },
+    cache: { type: 'none' },
+    security: { framework: 'spring-security' },
+    api: { documentation: 'none' },
+    messaging: 'none', workflow: 'none', scheduler: 'none'
+};
+function preset(id, name, description, icon, defaults) {
+    const config = {
+        ...exports.DEFAULT_CONFIG,
+        ...defaults,
+        project: { ...exports.DEFAULT_CONFIG.project, ...defaults.project },
+        core: { ...exports.DEFAULT_CONFIG.core, ...defaults.core },
+        database: { ...exports.DEFAULT_CONFIG.database, ...defaults.database },
+        cache: { ...exports.DEFAULT_CONFIG.cache, ...defaults.cache },
+        security: { ...exports.DEFAULT_CONFIG.security, ...defaults.security },
+        api: { ...exports.DEFAULT_CONFIG.api, ...defaults.api },
+        presetId: id
+    };
+    return { id, name, description, icon, config };
+}
 exports.PRESETS = [
-    {
-        id: 'enterprise-admin',
-        name: '企业级管理系统',
-        description: '适用于后台管理、OA、ERP、CRM',
-        icon: '🅰️',
-        config: {
-            project: {
-                name: 'my-admin',
-                type: 'modular-monolith',
-                javaVersion: '17',
-                buildTool: 'maven'
-            },
-            core: {
-                framework: 'spring-boot-3',
-                web: 'webmvc'
-            },
-            database: {
-                rdbms: 'mysql-8',
-                orm: 'mybatis-plus',
-                pool: 'druid',
-                nosql: ['redis']
-            },
-            cache: { type: 'redisson' },
-            security: { framework: 'sa-token' },
-            api: { documentation: 'knife4j' },
-            messaging: 'none',
-            workflow: 'flowable',
-            scheduler: 'xxl-job'
-        }
-    },
-    {
-        id: 'e-commerce',
-        name: '电商系统',
-        description: '适用于商城、交易平台',
-        icon: '🅱️',
-        config: {
-            project: {
-                name: 'my-shop',
-                type: 'modular-monolith',
-                javaVersion: '17',
-                buildTool: 'maven'
-            },
-            core: {
-                framework: 'spring-boot-3',
-                web: 'webmvc'
-            },
-            database: {
-                rdbms: 'mysql-8',
-                orm: 'mybatis',
-                pool: 'druid',
-                nosql: ['redis', 'elasticsearch']
-            },
-            cache: { type: 'redisson' },
-            security: { framework: 'spring-security' },
-            api: { documentation: 'swagger' },
-            messaging: 'rabbitmq',
-            workflow: 'none',
-            scheduler: 'none'
-        }
-    },
-    {
-        id: 'ai-application',
-        name: 'AI应用平台',
-        description: '适用于AI服务、RAG、Agent',
-        icon: '🤖',
-        config: {
-            project: {
-                name: 'my-ai-app',
-                type: 'monolith',
-                javaVersion: '21',
-                buildTool: 'maven'
-            },
-            core: {
-                framework: 'spring-boot-3',
-                web: 'webmvc'
-            },
-            database: {
-                rdbms: 'mysql-8',
-                orm: 'mybatis-plus',
-                pool: 'hikari',
-                nosql: ['redis', 'milvus']
-            },
-            cache: { type: 'redisson' },
-            security: { framework: 'sa-token' },
-            api: { documentation: 'knife4j' },
-            messaging: 'none',
-            workflow: 'none',
-            scheduler: 'none'
-        }
-    },
-    {
-        id: 'microservice',
-        name: '微服务架构',
-        description: '适用于大型分布式系统',
-        icon: '🔧',
-        config: {
-            project: {
-                name: 'my-microservice',
-                type: 'microservice',
-                javaVersion: '17',
-                buildTool: 'maven'
-            },
-            core: {
-                framework: 'spring-boot-3',
-                web: 'webmvc'
-            },
-            database: {
-                rdbms: 'mysql-8',
-                orm: 'mybatis-plus',
-                pool: 'druid',
-                nosql: ['redis']
-            },
-            cache: { type: 'redisson' },
-            security: { framework: 'spring-security' },
-            api: { documentation: 'knife4j' },
-            messaging: 'rocketmq',
-            workflow: 'none',
-            scheduler: 'xxl-job'
-        }
-    }
+    preset('enterprise-admin', '企业级管理系统', '后台管理、OA、ERP、CRM 的示例默认值', '🅰️', {
+        project: { name: 'my-admin', type: 'modular-monolith', javaVersion: '17', buildTool: 'maven', modules: ['user', 'audit'] },
+        database: { rdbms: 'mysql-8', orm: 'mybatis-plus', pool: 'hikari', nosql: [] },
+        api: { documentation: 'knife4j' }
+    }),
+    preset('e-commerce', '电商系统', '商城与交易场景的示例默认值', '🅱️', {
+        project: { name: 'my-shop', type: 'modular-monolith', javaVersion: '17', buildTool: 'maven', modules: ['catalog', 'order'] },
+        database: { rdbms: 'postgresql', orm: 'jpa', pool: 'hikari', nosql: [] }
+    }),
+    preset('ai-application', 'AI 应用平台', 'AI 服务场景的基础 Java 工程；RAG/Agent 组件待支持', '🤖', {
+        project: { name: 'my-ai-app', type: 'monolith', javaVersion: '17', buildTool: 'maven', modules: ['model', 'task'] }
+    })
 ];
-// 选项定义
 exports.OPTIONS = {
     projectType: [
-        { label: '$(circle-outline) 单体应用', value: 'monolith', description: '所有代码在一个项目中，适合小型项目' },
-        { label: '$(check) 模块化单体 (推荐)', value: 'modular-monolith', description: '按功能分模块，部署为一个应用' },
-        { label: '$(symbol-method) 微服务', value: 'microservice', description: '每个模块独立部署' },
-        { label: '$(arrow-swap) 单体/微服务可切换', value: 'switchable', description: '支持两种部署方式' }
+        { label: '单体应用', value: 'monolith', description: '一个可执行应用' },
+        { label: '模块化单体', value: 'modular-monolith', description: '多个业务模块，一个启动应用' },
+        { label: '微服务', value: 'microservice', description: '独立服务，可选网关' },
+        { label: '单体/微服务可切换（待实现）', value: '__unsupported__', description: '当前版本不可选择' }
     ],
-    javaVersion: [
-        { label: 'JDK 8', value: '8', description: '最稳定，兼容性最好' },
-        { label: '$(check) JDK 17 (推荐)', value: '17', description: 'LTS版本，支持新特性' },
-        { label: 'JDK 21', value: '21', description: '最新LTS，支持虚拟线程' }
-    ],
+    javaVersion: [{ label: 'JDK 17', value: '17', description: '当前工程的 Java 编译目标' }],
     buildTool: [
-        { label: '$(check) Maven (推荐)', value: 'maven', description: '配置简单，生态丰富' },
-        { label: 'Gradle', value: 'gradle', description: '构建速度快，配置灵活' }
+        { label: 'Maven', value: 'maven', description: '当前可生成' },
+        { label: 'Gradle（待实现）', value: '__unsupported__', description: '当前版本不可选择' }
     ],
-    framework: [
-        { label: 'Spring Boot 2.7', value: 'spring-boot-2', description: '兼容JDK 8' },
-        { label: '$(check) Spring Boot 3.x (推荐)', value: 'spring-boot-3', description: '需要JDK 17+' }
-    ],
+    framework: [{ label: 'Spring Boot 3', value: 'spring-boot-3' }],
     database: [
-        { label: '$(check) MySQL 8.0 (推荐)', value: 'mysql-8', description: '最流行，社区活跃' },
-        { label: 'MySQL 5.7', value: 'mysql-5', description: '兼容旧系统' },
-        { label: 'PostgreSQL', value: 'postgresql', description: '功能强大，支持JSON' },
-        { label: 'Oracle', value: 'oracle', description: '商业数据库' },
-        { label: 'SQL Server', value: 'sqlserver', description: '微软数据库' },
-        { label: '达梦 (国产信创)', value: 'dameng', description: '国产数据库' },
-        { label: '人大金仓 (国产信创)', value: 'kingbase', description: '国产数据库' }
+        { label: 'MySQL 8', value: 'mysql-8' },
+        { label: 'PostgreSQL', value: 'postgresql' }
     ],
     orm: [
-        { label: '$(check) MyBatis-Plus (推荐)', value: 'mybatis-plus', description: '功能丰富，自动生成CRUD' },
-        { label: 'MyBatis', value: 'mybatis', description: '轻量级，SQL灵活' },
-        { label: 'JPA/Hibernate', value: 'jpa', description: '面向对象' }
+        { label: 'MyBatis-Plus', value: 'mybatis-plus' },
+        { label: 'JPA / Hibernate', value: 'jpa' }
     ],
-    pool: [
-        { label: '$(check) Druid (推荐)', value: 'druid', description: '带监控功能' },
-        { label: 'HikariCP', value: 'hikari', description: '高性能，Spring Boot默认' }
-    ],
+    pool: [{ label: 'HikariCP', value: 'hikari' }],
     cache: [
-        { label: '$(check) Redis + Redisson (推荐)', value: 'redisson', description: '功能全面' },
-        { label: 'Redis + Lettuce', value: 'lettuce', description: '轻量级' },
-        { label: 'Redis + JetCache', value: 'jetcache', description: '支持本地+远程缓存' },
-        { label: '$(close) 无缓存', value: 'none' }
+        { label: '无缓存', value: 'none' },
+        { label: 'Redis + Redisson', value: 'redisson' }
     ],
     security: [
-        { label: '$(check) Sa-Token (推荐)', value: 'sa-token', description: '简单易用' },
-        { label: 'Spring Security', value: 'spring-security', description: '功能强大' },
-        { label: 'Apache Shiro', value: 'shiro', description: '传统方案' }
+        { label: 'Spring Security', value: 'spring-security' },
+        { label: 'Sa-Token', value: 'sa-token' }
     ],
     apiDoc: [
-        { label: '$(check) Knife4j (推荐)', value: 'knife4j', description: '增强版Swagger' },
-        { label: 'Springdoc/Swagger', value: 'swagger', description: '标准方案' },
-        { label: '$(close) 无', value: 'none' }
+        { label: '无', value: 'none' },
+        { label: 'Knife4j', value: 'knife4j' }
     ],
-    messaging: [
-        { label: 'RocketMQ', value: 'rocketmq', description: '阿里开源，功能全面' },
-        { label: 'RabbitMQ', value: 'rabbitmq', description: '轻量级，易上手' },
-        { label: 'Kafka', value: 'kafka', description: '高吞吐量' },
-        { label: 'Redis Stream', value: 'redis-stream', description: '轻量级，复用Redis' },
-        { label: '$(close) 无', value: 'none' }
-    ],
-    workflow: [
-        { label: '$(check) Flowable (推荐)', value: 'flowable', description: 'Activiti继承者' },
-        { label: 'Activiti', value: 'activiti', description: '老牌方案' },
-        { label: 'Camunda', value: 'camunda', description: '功能强大' },
-        { label: '$(close) 无', value: 'none' }
-    ],
-    scheduler: [
-        { label: '$(check) XXL-Job (推荐)', value: 'xxl-job', description: '分布式任务调度' },
-        { label: 'Quartz', value: 'quartz', description: '经典方案' },
-        { label: 'Spring Schedule', value: 'spring-schedule', description: '简单场景' },
-        { label: '$(close) 无', value: 'none' }
-    ]
+    messaging: [{ label: '无（其他组件待实现）', value: 'none' }],
+    workflow: [{ label: '无（其他组件待实现）', value: 'none' }],
+    scheduler: [{ label: '无（其他组件待实现）', value: 'none' }]
 };
-// 版本映射
+/** Versions stay centralized for the renderer and must be validated by a build matrix. */
 exports.VERSION_MAP = {
     'spring-boot-2': '2.7.18',
     'spring-boot-3': '3.2.5',

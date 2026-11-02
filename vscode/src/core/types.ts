@@ -44,6 +44,8 @@ export interface TechStackConfig {
         type: ProjectType;
         javaVersion: JavaVersion;
         buildTool: BuildTool;
+        /** Business boundaries. Modular and service architectures need two or more. */
+        modules?: string[];
     };
     core: {
         framework: Framework;
@@ -67,6 +69,11 @@ export interface TechStackConfig {
     messaging?: Messaging;
     workflow?: Workflow;
     scheduler?: Scheduler;
+    /** Explicit workflow and output fields for the revised wizard. */
+    schemaVersion?: 1;
+    presetId?: string;
+    outputMode?: 'project' | 'config' | 'prompt';
+    microservice?: { gateway: boolean };
 }
 
 // 预设方案

@@ -20,11 +20,11 @@ export interface AIProvider {
  * 空实现，后续扩展
  */
 export class PlaceholderAIProvider implements AIProvider {
-    async chat(message: string): Promise<string> {
+    async chat(_message: string): Promise<string> {
         throw new Error('AI功能尚未实现');
     }
     
-    async generateConfig(description: string): Promise<TechStackConfig> {
+    async generateConfig(_description: string): Promise<TechStackConfig> {
         throw new Error('AI功能尚未实现');
     }
 }

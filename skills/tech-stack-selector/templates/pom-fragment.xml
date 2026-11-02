@@ -1,141 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 对话式 Maven 根工程模板；需按已确认配置替换标识，并经过实际构建验证。
+     单体使用 jar；多模块根工程使用 pom 并填写 modules。
+     子模块的 parent 应指向项目父工程，不能直接复制本根工程模板。
+     依赖只加入用户选中的组件；无缓存时不加入 Redis。 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>${SPRING_BOOT_VERSION}</version>
         <relativePath/>
     </parent>
-
-    <groupId>${GROUP_ID}</groupId>
+    <groupId>com.example</groupId>
     <artifactId>${PROJECT_NAME}</artifactId>
-    <version>${PROJECT_VERSION}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>${PACKAGING}</packaging>
-
-    <name>${PROJECT_NAME}</name>
-    <description>${PROJECT_DESCRIPTION}</description>
-
     <properties>
-        <java.version>${JAVA_VERSION}</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>${JAVA_VERSION}</maven.compiler.source>
-        <maven.compiler.target>${JAVA_VERSION}</maven.compiler.target>
-        ${CUSTOM_PROPERTIES}
     </properties>
-
+    <!-- ${MODULES_XML}: 仅在聚合根工程中填写 modules 元素 -->
     <dependencies>
-        <!-- Spring Boot Web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- Spring Boot AOP -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-
-        ${DATABASE_DEPENDENCIES}
-
-        ${CACHE_DEPENDENCIES}
-
-        ${SECURITY_DEPENDENCIES}
-
-        ${API_DOC_DEPENDENCY}
-
-        ${MESSAGING_DEPENDENCY}
-
-        ${WORKFLOW_DEPENDENCY}
-
-        ${SCHEDULER_DEPENDENCY}
-
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- Hutool -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${HUTOOL_VERSION}</version>
-        </dependency>
-
-        <!-- MapStruct -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${MAPSTRUCT_VERSION}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>${MAPSTRUCT_VERSION}</version>
-        </dependency>
-
-        <!-- Lombok MapStruct Binding -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-mapstruct-binding</artifactId>
-            <version>0.2.0</version>
-        </dependency>
-
-        <!-- Test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        ${ADDITIONAL_DEPENDENCIES}
+        <!-- ${SELECTED_DEPENDENCIES_XML}: 按已选组件填写，含正确 JDBC 驱动 -->
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${JAVA_VERSION}</source>
-                    <target>${JAVA_VERSION}</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${MAPSTRUCT_VERSION}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    ${PROFILE_CONFIG}
+    <!-- ${BUILD_XML}: 仅可执行应用模块启用 Spring Boot 打包插件 -->
 </project>

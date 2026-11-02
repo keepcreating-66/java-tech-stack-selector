@@ -1,0 +1,15 @@
+{
+  "name": "java-tech-stack-selector",
+  "version": "1.1.0",
+  "description": "通过对话先确定Java后端架构，再选择业务场景与技术栈；VSIX工程生成器单独安装",
+  "author": {
+    "name": "keepcreating-66"
+  },
+  "homepage": "https://github.com/keepcreating-66/java-tech-stack-selector",
+  "repository": "https://github.com/keepcreating-66/java-tech-stack-selector",
+  "license": "MIT",
+  "logo": ".cursor-plugin/icon.svg",
+  "skills": ["skills/tech-stack-selector"],
+  "commands": ["commands"],
+  "keywords": ["java", "spring-boot", "tech-stack", "project-scaffold", "backend"]
+}

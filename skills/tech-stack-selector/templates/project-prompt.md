@@ -1,112 +1,31 @@
-# ${PROJECT_NAME}
+# ${PROJECT_NAME} 后续开发提示词
 
-## 项目概述
+请以用户已确认的配置为依据创建或完善 Java 后端工程。先读取已有代码和运行说明；所有待填写标识必须替换为确认值后才交付。
 
-请帮我创建一个Java后端项目，技术栈如下：
+## 已确认配置
 
-### 基础配置
-- 项目名称：${PROJECT_NAME}
-- 项目类型：${PROJECT_TYPE}
-- Java版本：JDK ${JAVA_VERSION}
-- 构建工具：${BUILD_TOOL}
-
-### 核心框架
-- 应用框架：Spring Boot ${SPRING_BOOT_VERSION}
-- Web层：Spring WebMVC
-${MICROSERVICE_INFO}
-
-### 数据层
-- 数据库：${RDBMS} ${RDBMS_VERSION}
-- ORM：${ORM} ${ORM_VERSION}
-- 连接池：${POOL} ${POOL_VERSION}
-${CACHE_INFO}
-${MESSAGING_INFO}
-${SEARCH_INFO}
-
-### 安全认证
-- 认证框架：${SECURITY_FRAMEWORK}
-- Token方式：${TOKEN_TYPE}
-- 权限模型：${PERMISSION_MODEL}
-
-### API文档
-- 文档工具：${API_DOC}
-
-### 工具库
-${TOOLS_INFO}
-
-### 其他组件
-${OTHER_COMPONENTS}
-
-### 监控
-${MONITORING_INFO}
-
-### 部署
-- 容器化：${CONTAINER}
-- 编排：${ORCHESTRATION}
-
----
-
-## 要求
-
-### 项目结构
-请创建标准的${BUILD_TOOL}多模块项目，结构如下：
-
-```
-${PROJECT_NAME}/
-${MODULE_STRUCTURE}
-├── sql/                     # SQL脚本
-├── docker/                  # Docker配置
-├── config/                  # 配置文件
-└── pom.xml                  # 父POM
+```json
+${TECH_STACK_JSON}
 ```
 
-### 代码规范
-1. 遵循阿里巴巴Java开发手册
-2. 使用Lombok简化代码
-3. 使用MapStruct进行对象转换
-4. 统一异常处理和响应格式
-5. 配置日志和链路追踪
-6. RESTful API设计规范
+- 架构：${PROJECT_TYPE}
+- 业务模块或服务：${MODULES}
+- 目标目录：${OUTPUT_DIRECTORY}
 
-### 功能示例
-请实现一个基础的用户管理CRUD示例，包括：
-1. 用户实体类（User Entity）
-2. 用户Mapper（MyBatis-Plus）
-3. 用户Service（包含缓存）
-4. 用户Controller（RESTful API）
-5. 用户DTO/VO
-6. 单元测试
+## 按架构生成
 
-### 配置文件
-请配置好以下文件：
-1. application.yml（主配置）
-2. application-dev.yml（开发环境）
-3. application-test.yml（测试环境）
-4. application-prod.yml（生产环境）
-5. logback-spring.xml（日志配置）
+只应用与已选架构对应的规则：
 
-### 其他要求
-1. 配置跨域
-2. 配置全局异常处理
-3. 配置API文档（如启用）
-4. 配置认证授权（如启用）
-5. 编写README.md
-6. 包含.gitignore
+- 单体：一个 Maven 应用，业务域分别组织为代码包，一个启动类。
+- 模块化单体：Maven 父工程、common、业务模块和 bootstrap；声明模块依赖，由 bootstrap 启动一个应用。
+- 微服务：Maven 父工程及各业务服务；每个服务有独立启动类、端口与数据源配置。仅在选择网关时生成网关及静态路由。
 
----
+当前确定性生成范围为 Java 17、Spring Boot 3、Maven、WebMVC。遵守配置选定的数据库、ORM、缓存、认证与 API 文档组件：JPA 生成 Repository，MyBatis-Plus 生成 Mapper；无缓存不添加 Redis 依赖或配置；未启用 API 文档时不添加文档组件。不要默认增加未选中的工具库、中间件或部署组件。
 
-## 技术栈详情
+## 最小示例与验证
 
-${TECH_STACK_DETAILS}
+为各业务域提供与选定 ORM 一致的实体、数据访问、服务和 CRUD 接口；生成运行所需依赖、环境变量样例、数据库初始化说明、健康端点、测试与 README。演示内容只证明工程组织和组件接线，业务规则按用户需求另行完善。
 
----
+先检查目标目录；已存在时保留文件并请用户换名或选择新目录。创建后检查模块依赖、配置和示例代码一致性，执行环境允许的 Maven 构建与启动检查。准确报告文件是否写入、构建是否通过、启动是否验证；缺少工具、依赖或数据库时标明尚未验证及原因。
 
-## 参考资料
-
-- [Spring Boot官方文档](https://spring.io/projects/spring-boot)
-- [MyBatis-Plus官方文档](https://baomidou.com/)
-${REFERENCE_LINKS}
-
----
-
-*此提示词由 java-tech-stack-selector 生成*
+仅导出本提示词表示提示词已创建。用户明确要求生成工程时，须实际创建文件并报告验证结果。

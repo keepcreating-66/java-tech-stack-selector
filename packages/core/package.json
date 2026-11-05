@@ -1,0 +1,6 @@
+{
+  "name": "@java-tech-stack/core",
+  "version": "1.2.0-rc.1",
+  "private": true,
+  "main": "src/index.ts"
+}

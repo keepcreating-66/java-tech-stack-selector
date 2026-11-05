@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "presetId": "custom",
+  "outputMode": "project",
+  "project": {
+    "name": "example-monolith",
+    "type": "monolith",
+    "javaVersion": "17",
+    "buildTool": "maven",
+    "modules": [
+      "user",
+      "order"
+    ]
+  },
+  "core": {
+    "framework": "spring-boot-3",
+    "web": "webmvc"
+  },
+  "database": {
+    "rdbms": "mysql-8",
+    "orm": "jpa",
+    "pool": "hikari",
+    "nosql": []
+  },
+  "cache": {
+    "type": "none"
+  },
+  "security": {
+    "framework": "spring-security"
+  },
+  "api": {
+    "documentation": "none"
+  },
+  "messaging": "none",
+  "workflow": "none",
+  "scheduler": "none"
+}

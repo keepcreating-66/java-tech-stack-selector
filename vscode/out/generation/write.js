@@ -1,83 +1,116 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// vscode/src/generation/write.ts
+var write_exports = {};
+__export(write_exports, {
+  writeProject: () => writeProject
 });
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeProject = writeProject;
-const fs = __importStar(require("fs"));
-const path = __importStar(require("path"));
-/** Writes only into a new project directory. Existing user files are never replaced. */
+module.exports = __toCommonJS(write_exports);
+
+// packages/core/src/generation/write.ts
+var fs = __toESM(require("fs"));
+var path = __toESM(require("path"));
 function writeProject(plan, outputRoot) {
-    if (!fs.statSync(outputRoot).isDirectory()) {
-        throw new Error(`输出位置不是目录：${outputRoot}`);
+  if (!fs.statSync(outputRoot).isDirectory()) {
+    throw new Error(`\u8F93\u51FA\u4F4D\u7F6E\u4E0D\u662F\u76EE\u5F55\uFF1A${outputRoot}`);
+  }
+  if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(plan.projectName)) {
+    throw new Error("\u9879\u76EE\u540D\u4E0D\u5B89\u5168");
+  }
+  const target = path.join(outputRoot, plan.projectName);
+  const entries = Object.entries(plan.files);
+  for (const [relative] of entries) {
+    if (!relative || relative.includes("\\") || relative.includes(":") || path.posix.isAbsolute(relative) || path.win32.isAbsolute(relative) || relative === ".." || relative.startsWith("../") || path.posix.normalize(relative) !== relative) {
+      throw new Error(`\u751F\u6210\u8DEF\u5F84\u4E0D\u5B89\u5168\uFF1A${relative}`);
     }
-    if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(plan.projectName)) {
-        throw new Error('项目名不安全');
+  }
+  try {
+    fs.lstatSync(target);
+    throw new Error(`\u76EE\u6807\u9879\u76EE\u5DF2\u5B58\u5728\uFF0C\u672A\u8986\u76D6\uFF1A${target}`);
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      throw error;
     }
-    const target = path.join(outputRoot, plan.projectName);
-    if (fs.existsSync(target)) {
-        throw new Error(`目标项目已存在，未覆盖：${target}`);
+  }
+  const stage = fs.mkdtempSync(path.join(outputRoot, `.${plan.projectName}-staging-`));
+  let reserved = false;
+  const createdFiles = [];
+  const createdDirs = [];
+  try {
+    for (const [relative, content] of entries) {
+      const file = path.join(stage, relative);
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, content, { flag: "wx" });
     }
-    const entries = Object.entries(plan.files);
+    fs.mkdirSync(target);
+    reserved = true;
     for (const [relative] of entries) {
-        const normalized = path.posix.normalize(relative.replaceAll('\\', '/'));
-        if (!relative || path.isAbsolute(relative) || normalized === '..' || normalized.startsWith('../') || normalized !== relative.replaceAll('\\', '/')) {
-            throw new Error(`生成路径不安全：${relative}`);
+      const parts = relative.split("/");
+      let directory = target;
+      for (const part of parts.slice(0, -1)) {
+        directory = path.join(directory, part);
+        if (!createdDirs.includes(directory)) {
+          fs.mkdirSync(directory);
+          createdDirs.push(directory);
         }
+      }
+      const file = path.join(target, relative);
+      fs.copyFileSync(path.join(stage, relative), file, fs.constants.COPYFILE_EXCL);
+      createdFiles.push(file);
     }
-    const stage = fs.mkdtempSync(path.join(outputRoot, `.${plan.projectName}-staging-`));
-    let reserved = false;
-    try {
-        for (const [relative, content] of entries) {
-            const file = path.join(stage, relative);
-            fs.mkdirSync(path.dirname(file), { recursive: true });
-            fs.writeFileSync(file, content, { flag: 'wx' });
-        }
-        // mkdir is exclusive, including for dangling links and concurrent generators.
-        fs.mkdirSync(target);
-        reserved = true;
-        fs.renameSync(stage, target);
-        return target;
+    return target;
+  } catch (error) {
+    for (const file of createdFiles.reverse()) {
+      try {
+        fs.unlinkSync(file);
+      } catch {
+      }
     }
-    catch (error) {
-        fs.rmSync(stage, { recursive: true, force: true });
-        if (reserved) {
-            try {
-                fs.rmdirSync(target);
-            }
-            catch { /* Preserve any independently added files. */ }
-        }
-        throw error;
+    for (const directory of createdDirs.reverse()) {
+      try {
+        fs.rmdirSync(directory);
+      } catch {
+      }
     }
+    if (reserved) {
+      try {
+        fs.rmdirSync(target);
+      } catch {
+      }
+    }
+    throw error;
+  } finally {
+    fs.rmSync(stage, { recursive: true, force: true });
+  }
 }
-//# sourceMappingURL=write.js.map
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  writeProject
+});

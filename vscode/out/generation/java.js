@@ -1,31 +1,54 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.javaPath = exports.upper = exports.basePackage = void 0;
-exports.application = application;
-exports.entity = entity;
-exports.repository = repository;
-exports.service = service;
-exports.controller = controller;
-exports.security = security;
-exports.contextTest = contextTest;
-exports.gatewayTest = gatewayTest;
-const basePackage = (config) => `com.example.${config.project.name.replaceAll('-', '')}`;
-exports.basePackage = basePackage;
-const upper = (value) => value.split('-').map(p => p[0].toUpperCase() + p.slice(1)).join('');
-exports.upper = upper;
-const javaPath = (pkg, cls) => `src/main/java/${pkg.replaceAll('.', '/')}/${cls}.java`;
-exports.javaPath = javaPath;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// vscode/src/generation/java.ts
+var java_exports = {};
+__export(java_exports, {
+  application: () => application,
+  basePackage: () => basePackage,
+  contextTest: () => contextTest,
+  controller: () => controller,
+  entity: () => entity,
+  gatewayTest: () => gatewayTest,
+  javaPath: () => javaPath,
+  repository: () => repository,
+  security: () => security,
+  service: () => service,
+  upper: () => upper
+});
+module.exports = __toCommonJS(java_exports);
+
+// packages/core/src/generation/java.ts
+var basePackage = (config) => `com.example.${config.project.name.replaceAll("-", "")}`;
+var upper = (value) => value.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("");
+var javaPath = (pkg, cls) => `src/main/java/${pkg.replaceAll(".", "/")}/${cls}.java`;
 function application(pkg, cls, scanRoot, orm) {
-    const jpa = scanRoot && orm === 'jpa' ? `import org.springframework.boot.autoconfigure.domain.EntityScan;
+  const jpa = scanRoot && orm === "jpa" ? `import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("${scanRoot}")
 @EnableJpaRepositories("${scanRoot}")
-` : '';
-    const mapper = scanRoot && orm === 'mybatis-plus' ? `import org.mybatis.spring.annotation.MapperScan;
+` : "";
+  const mapper = scanRoot && orm === "mybatis-plus" ? `import org.mybatis.spring.annotation.MapperScan;
 @MapperScan("${scanRoot}")
-` : '';
-    const scan = scanRoot ? `(scanBasePackages = "${scanRoot}")` : '';
-    return `package ${pkg};
+` : "";
+  const scan = scanRoot ? `(scanBasePackages = "${scanRoot}")` : "";
+  return `package ${pkg};
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,16 +59,14 @@ public class ${cls} {
 }
 `;
 }
-function entity(pkg, module, orm) {
-    const cls = `${(0, exports.upper)(module)}Record`;
-    const annotation = orm === 'jpa'
-        ? `import jakarta.persistence.*;
+function entity(pkg, module2, orm) {
+  const cls = `${upper(module2)}Record`;
+  const annotation = orm === "jpa" ? `import jakarta.persistence.*;
 @Entity
-@Table(name = "${module.replaceAll('-', '_')}_records")`
-        : `import com.baomidou.mybatisplus.annotation.*;
-@TableName("${module.replaceAll('-', '_')}_records")`;
-    const id = orm === 'jpa' ? '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' : '@TableId(type = IdType.AUTO)';
-    return `package ${pkg};
+@Table(name = "${module2.replaceAll("-", "_")}_records")` : `import com.baomidou.mybatisplus.annotation.*;
+@TableName("${module2.replaceAll("-", "_")}_records")`;
+  const id = orm === "jpa" ? "@Id @GeneratedValue(strategy = GenerationType.IDENTITY)" : "@TableId(type = IdType.AUTO)";
+  return `package ${pkg};
 
 ${annotation}
 public class ${cls} {
@@ -60,10 +81,10 @@ public class ${cls} {
 }
 `;
 }
-function repository(pkg, module, orm) {
-    const entityName = `${(0, exports.upper)(module)}Record`;
-    const cls = `${(0, exports.upper)(module)}Repository`;
-    return orm === 'jpa' ? `package ${pkg};
+function repository(pkg, module2, orm) {
+  const entityName = `${upper(module2)}Record`;
+  const cls = `${upper(module2)}Repository`;
+  return orm === "jpa" ? `package ${pkg};
 
 import org.springframework.data.jpa.repository.JpaRepository;
 public interface ${cls} extends JpaRepository<${entityName}, Long> {}
@@ -75,9 +96,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface ${cls} extends BaseMapper<${entityName}> {}
 `;
 }
-function service(pkg, module, orm) {
-    const name = (0, exports.upper)(module), entityName = `${name}Record`, repositoryName = `${name}Repository`;
-    const methods = orm === 'jpa' ? `
+function service(pkg, module2, orm) {
+  const name = upper(module2), entityName = `${name}Record`, repositoryName = `${name}Repository`;
+  const methods = orm === "jpa" ? `
     public ${entityName} create(${entityName} item) { item.setId(null); return repository.save(item); }
     public List<${entityName}> list() { return repository.findAll(); }
     public Optional<${entityName}> find(Long id) { return repository.findById(id); }
@@ -96,7 +117,7 @@ function service(pkg, module, orm) {
         item.setId(id); repository.updateById(item); return Optional.of(item);
     }
     public boolean delete(Long id) { return repository.deleteById(id) > 0; }`;
-    return `package ${pkg};
+  return `package ${pkg};
 
 import java.util.List;
 import java.util.Optional;
@@ -110,11 +131,13 @@ ${methods}
 }
 `;
 }
-function controller(pkg, module, commonPackage) {
-    const name = (0, exports.upper)(module), record = `${name}Record`, serviceName = `${name}Service`, route = module.replaceAll('-', '') + 's';
-    const commonImport = commonPackage ? `import ${commonPackage}.ModuleInfo;\n` : '';
-    const info = commonPackage ? `    @GetMapping("/info") public ModuleInfo info() { return new ModuleInfo("${module}"); }\n` : '';
-    return `package ${pkg};
+function controller(pkg, module2, commonPackage) {
+  const name = upper(module2), record = `${name}Record`, serviceName = `${name}Service`, route = module2.replaceAll("-", "") + "s";
+  const commonImport = commonPackage ? `import ${commonPackage}.ModuleInfo;
+` : "";
+  const info = commonPackage ? `    @GetMapping("/info") public ModuleInfo info() { return new ModuleInfo("${module2}"); }
+` : "";
+  return `package ${pkg};
 
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -140,8 +163,8 @@ ${info}    @GetMapping public List<${record}> list() { return service.list(); }
 `;
 }
 function security(pkg, framework) {
-    if (framework === 'spring-security') {
-        return { 'SecurityConfig.java': `package ${pkg};
+  if (framework === "spring-security") {
+    return { "SecurityConfig.java": `package ${pkg};
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -157,7 +180,7 @@ public class SecurityConfig {
         return http.build();
     }
 }
-`, 'CsrfController.java': `package ${pkg};
+`, "CsrfController.java": `package ${pkg};
 
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -168,9 +191,9 @@ public class CsrfController {
     @GetMapping("/csrf") public CsrfToken csrf(CsrfToken token) { return token; }
 }
 ` };
-    }
-    return {
-        'SaTokenConfig.java': `package ${pkg};
+  }
+  return {
+    "SaTokenConfig.java": `package ${pkg};
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
@@ -185,7 +208,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
     }
 }
 `,
-        'DemoAuthController.java': `package ${pkg};
+    "DemoAuthController.java": `package ${pkg};
 
 import java.util.Map;
 import cn.dev33.satoken.stp.StpUtil;
@@ -207,7 +230,7 @@ public class DemoAuthController {
     }
 }
 `,
-        'SaTokenExceptionHandler.java': `package ${pkg};
+    "SaTokenExceptionHandler.java": `package ${pkg};
 
 import cn.dev33.satoken.exception.NotLoginException;
 import org.springframework.http.HttpStatus;
@@ -220,25 +243,22 @@ public class SaTokenExceptionHandler {
     public void notLoggedIn() {}
 }
 `
-    };
+  };
 }
 function contextTest(pkg, cls, beanName, route, framework) {
-    const login = framework === 'spring-security'
-        ? `String header = "Authorization";
-        String token = "Basic " + java.util.Base64.getEncoder().encodeToString("test-user:test-pass".getBytes(java.nio.charset.StandardCharsets.UTF_8));`
-        : `var login = client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/auth/login"))
+  const login = framework === "spring-security" ? `String header = "Authorization";
+        String token = "Basic " + java.util.Base64.getEncoder().encodeToString("test-user:test-pass".getBytes(java.nio.charset.StandardCharsets.UTF_8));` : `var login = client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/auth/login"))
             .header("Content-Type", "application/x-www-form-urlencoded")
             .POST(HttpRequest.BodyPublishers.ofString("username=test-user&password=test-pass")).build(), HttpResponse.BodyHandlers.ofString());
         assertThat(login.statusCode()).isEqualTo(200);
         String header = "satoken";
         String token = new com.fasterxml.jackson.databind.ObjectMapper().readTree(login.body()).get("token").asText();`;
-    const csrf = framework === 'spring-security' ? `var csrf = client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/csrf"))
+  const csrf = framework === "spring-security" ? `var csrf = client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/csrf"))
             .header(header, token).GET().build(), HttpResponse.BodyHandlers.ofString());
         assertThat(csrf.statusCode()).isEqualTo(200);
         var csrfJson = new com.fasterxml.jackson.databind.ObjectMapper().readTree(csrf.body());
-        String csrfHeader = csrfJson.get("headerName").asText(), csrfToken = csrfJson.get("token").asText();`
-        : 'String csrfHeader = "X-Demo-Test", csrfToken = "unused";';
-    return `package ${pkg};
+        String csrfHeader = csrfJson.get("headerName").asText(), csrfToken = csrfJson.get("token").asText();` : 'String csrfHeader = "X-Demo-Test", csrfToken = "unused";';
+  return `package ${pkg};
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -297,9 +317,8 @@ class ${cls}Test {
 }
 `;
 }
-/** Start a real gateway and verify that it forwards to an independent HTTP server. */
-function gatewayTest(pkg, cls, module) {
-    return `package ${pkg};
+function gatewayTest(pkg, cls, module2) {
+  return `package ${pkg};
 
 import com.sun.net.httpserver.HttpServer;
 import java.net.InetSocketAddress;
@@ -321,7 +340,7 @@ class ${cls}Test {
     static {
         try {
             upstream = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
-            upstream.createContext("/api/${module.replaceAll('-', '')}s/ping", exchange -> {
+            upstream.createContext("/api/${module2.replaceAll("-", "")}s/ping", exchange -> {
                 byte[] body = "gateway-ok".getBytes(java.nio.charset.StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(200, body.length);
                 try (var out = exchange.getResponseBody()) { out.write(body); }
@@ -330,17 +349,30 @@ class ${cls}Test {
         } catch (java.io.IOException error) { throw new ExceptionInInitializerError(error); }
     }
     @DynamicPropertySource static void serviceUrl(DynamicPropertyRegistry properties) {
-        properties.add("${module.toUpperCase().replaceAll('-', '_')}_SERVICE_URL", () -> "http://127.0.0.1:" + upstream.getAddress().getPort());
+        properties.add("${module2.toUpperCase().replaceAll("-", "_")}_SERVICE_URL", () -> "http://127.0.0.1:" + upstream.getAddress().getPort());
     }
     @LocalServerPort int port;
     @AfterAll static void stopUpstream() { upstream.stop(0); }
     @Test void forwardsBusinessRoute() throws Exception {
         var response = HttpClient.newHttpClient().send(HttpRequest.newBuilder(
-            URI.create("http://localhost:" + port + "/api/${module.replaceAll('-', '')}s/ping")).GET().build(), HttpResponse.BodyHandlers.ofString());
+            URI.create("http://localhost:" + port + "/api/${module2.replaceAll("-", "")}s/ping")).GET().build(), HttpResponse.BodyHandlers.ofString());
         assertThat(response.statusCode()).isEqualTo(200);
         assertThat(response.body()).isEqualTo("gateway-ok");
     }
 }
 `;
 }
-//# sourceMappingURL=java.js.map
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  application,
+  basePackage,
+  contextTest,
+  controller,
+  entity,
+  gatewayTest,
+  javaPath,
+  repository,
+  security,
+  service,
+  upper
+});

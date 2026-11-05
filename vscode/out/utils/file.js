@@ -1,73 +1,66 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// vscode/src/utils/file.ts
+var file_exports = {};
+__export(file_exports, {
+  ensureDir: () => ensureDir,
+  exists: () => exists,
+  readFile: () => readFile,
+  writeFile: () => writeFile
 });
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ensureDir = ensureDir;
-exports.writeFile = writeFile;
-exports.readFile = readFile;
-exports.exists = exists;
-const fs = __importStar(require("fs"));
-const path = __importStar(require("path"));
-/**
- * 确保目录存在
- */
+module.exports = __toCommonJS(file_exports);
+var fs = __toESM(require("fs"));
+var path = __toESM(require("path"));
 function ensureDir(dirPath) {
-    if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath, { recursive: true });
-    }
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
 }
-/**
- * 写入文件
- */
 function writeFile(filePath, content) {
-    const dir = path.dirname(filePath);
-    ensureDir(dir);
-    fs.writeFileSync(filePath, content, 'utf-8');
+  const dir = path.dirname(filePath);
+  ensureDir(dir);
+  fs.writeFileSync(filePath, content, "utf-8");
 }
-/**
- * 读取文件
- */
 function readFile(filePath) {
-    if (fs.existsSync(filePath)) {
-        return fs.readFileSync(filePath, 'utf-8');
-    }
-    return '';
+  if (fs.existsSync(filePath)) {
+    return fs.readFileSync(filePath, "utf-8");
+  }
+  return "";
 }
-/**
- * 检查文件是否存在
- */
 function exists(filePath) {
-    return fs.existsSync(filePath);
+  return fs.existsSync(filePath);
 }
-//# sourceMappingURL=file.js.map
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  ensureDir,
+  exists,
+  readFile,
+  writeFile
+});

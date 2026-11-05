@@ -1,3 +1,5 @@
+> 共享核心迁移说明：开发依赖请在仓库根目录执行 `npm ci`；根锁文件为唯一锁文件。此目录的 `npm run compile` 调用根构建脚本。下文旧安装包描述仍对应 VSIX 1.1.0。
+
 # Java Tech Stack Selector VSIX
 
 这是 Cursor / VS Code 的原生扩展入口。1.1.0 开发版使用 QuickPick 向导收集配置，然后由本地生成器创建 Maven 工程。仓库根目录的 Cursor Skill 和 `/start` 等对话命令单独安装；安装本 VSIX 不会自动添加这些命令。

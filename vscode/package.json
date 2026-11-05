@@ -1,11 +1,14 @@
 {
   "name": "java-tech-stack-selector",
   "displayName": "Java Tech Stack Selector",
-  "description": "按系统架构选型并生成可验证的 Java 后端工程",
+  "description": "\u6309\u7cfb\u7edf\u67b6\u6784\u9009\u578b\u5e76\u751f\u6210\u53ef\u9a8c\u8bc1\u7684 Java \u540e\u7aef\u5de5\u7a0b",
   "version": "1.1.0",
   "publisher": "java-tech-stack-developer",
   "license": "MIT",
-  "repository": {"type": "git", "url": "https://github.com/keepcreating-66/java-tech-stack-selector.git"},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/keepcreating-66/java-tech-stack-selector.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -28,20 +31,20 @@
     "commands": [
       {
         "command": "javaTechStack.start",
-        "title": "开始技术选型",
+        "title": "\u5f00\u59cb\u6280\u672f\u9009\u578b",
         "category": "Java Tech Stack"
       },
       {
         "command": "javaTechStack.preset",
-        "title": "使用预设方案",
+        "title": "\u4f7f\u7528\u9884\u8bbe\u65b9\u6848",
         "category": "Java Tech Stack"
       }
     ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile": "node ../scripts/build.mjs",
+    "watch": "node ../scripts/build.mjs --watch",
     "test": "npm run compile && node --test test/*.test.cjs",
     "test:projects": "npm run compile && node test/verify-projects.cjs",
     "lint": "eslint src --ext ts"
@@ -53,5 +56,8 @@
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.56.0",
     "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "@java-tech-stack/core": "1.2.0-rc.1"
   }
 }

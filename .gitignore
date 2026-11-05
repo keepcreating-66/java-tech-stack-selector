@@ -16,3 +16,7 @@ logs
 # OS
 Thumbs.db
 vscode/node_modules
+
+node_modules/
+packages/core/dist/
+dist/

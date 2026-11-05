@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@java-tech-stack/core/*": [
+        "packages/core/*"
+      ]
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "vscode/node_modules/@types"
+    ]
+  },
+  "include": [
+    "packages/core/src/**/*.ts",
+    "cli/src/**/*.ts",
+    "vscode/src/**/*.ts"
+  ]
+}
